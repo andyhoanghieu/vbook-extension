@@ -1,0 +1,20 @@
+{
+  "metadata": {
+    "name": "Đông Nhật",
+    "author": "Andy Hoàng Hiếu",
+    "version": 1,
+    "source": "https://www.drxsw.com",
+    "regexp": "^https://www\\.drxsw\\.com/book/.*",
+    "description": "Đọc truyện từ drxsw.com – trang truyện Trung Quốc nhiều thể loại.",
+    "locale": "zh_CN",
+    "tag": "",
+    "type": "novel"
+  },
+  "script": {
+    "detail": "detail.js",
+    "toc": "toc.js",
+    "chap": "chap.js",
+    "search": "search.js",
+    "genre": "genre.js"
+  }
+}
