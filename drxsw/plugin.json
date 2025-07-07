@@ -5,11 +5,17 @@
     "version": 1,
     "source": "https://www.drxsw.com",
     "regexp": "^https://www\\.drxsw\\.com/book/.*",
-    "description": "Test plugin đơn giản",
+    "description": "Đọc truyện từ drxsw.com – trang truyện Trung Quốc nhiều thể loại.",
     "locale": "zh_CN",
-    "type": "novel"
+    "tag": "",
+    "type": "novel",
+    "icon": "https://raw.githubusercontent.com/andyhoanghieu/vbook-extension/main/drxsw/icon.png"
   },
   "script": {
-    "detail": "src/detail.js"
+      "detail": "src/detail.js",
+      "toc": "src/toc.js",
+      "chap": "src/chap.js",
+      "search": "src/search.js",
+      "genre": "src/genre.js"
   }
 }
