@@ -1,0 +1,15 @@
+{
+  "metadata": {
+    "name": "Test Plugin",
+    "author": "Andy Hoàng Hiếu",
+    "version": 1,
+    "source": "https://www.drxsw.com",
+    "regexp": "^https://(www\\.)?drxsw\\.com/book/.*",
+    "description": "Plugin test đơn giản",
+    "locale": "zh_CN",
+    "type": "novel"
+  },
+  "script": {
+    "detail": "src/detail.js"
+  }
+}
