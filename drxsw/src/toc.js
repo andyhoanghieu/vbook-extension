@@ -1,14 +1,11 @@
 function execute(url) {
-    let doc = Http.get(url).html();
+    const doc = Http.get(url).html();
 
-    let list = [];
-    doc.select("ul#chapterList li a").forEach(it => {
-        list.push({
-            name: it.text(),
-            url: it.attr("href"),
-            host: "https://www.drxsw.com"
-        });
-    });
+    const list = doc.select("ul#chapterList li a").map(it => ({
+        name: it.text(),
+        url: it.attr("href"),
+        host: "https://www.drxsw.com"
+    }));
 
     return Response.success(list);
 }
