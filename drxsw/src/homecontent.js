@@ -1,32 +1,30 @@
 // homecontent.js
 function execute(url, page) {
-  if (!page) page = "";
+  if (!page) page = 1;
+  let doc = Http.get(url + (page > 1 ? `index_${page}.html` : "")).html();
 
-  let response = fetch(url + page);
-  if (!response.ok) return null;
+  let books = [];
+  doc.select("div.lbox > ul > li").forEach(li => {
+    let aTag = li.selectFirst("a");
+    let name = aTag.attr("title");
+    let link = aTag.absUrl("href");
+    let cover = aTag.selectFirst("img").attr("data-src");
+    let description = li.selectFirst("dd").text();
 
-  let doc = response.html();
-  const data = [];
-
-  doc.select("dl").forEach(e => {
-    let name = e.select("dd a").first().text();
-    let link = e.select("dd a").first().attr("href");
-    let cover = e.select("dt img").attr("src");
-    let description = e.select("dd.name").text();
-
-    data.push({
+    books.push({
       name: name,
       link: link,
-      cover: cover.startsWith("http") ? cover : "https://www.drxsw.com" + cover,
+      cover: cover,
       description: description
     });
   });
 
-  // phân trang
-  let next = doc.select(".pagelink .next").attr("href");
-  if (next && next !== "javascript:;") {
-    return Response.success(data, next);
+  // Xác định phân trang
+  let next = null;
+  let hasNext = doc.selectFirst("a.next") !== null;
+  if (hasNext) {
+    next = page + 1;
   }
 
-  return Response.success(data);
+  return Response.success(books, next);
 }
