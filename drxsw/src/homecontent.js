@@ -1,30 +1,25 @@
 // homecontent.js
 function execute(url, page) {
-  if (!page) page = 1;
-  let doc = Http.get(url + (page > 1 ? `index_${page}.html` : "")).html();
+  let doc = Http.get(url).html();
+  let books = doc.select("div[class=channel] dl");
+  let data = [];
 
-  let books = [];
-  doc.select("div.lbox > ul > li").forEach(li => {
-    let aTag = li.selectFirst("a");
-    let name = aTag.attr("title");
-    let link = aTag.absUrl("href");
-    let cover = aTag.selectFirst("img").attr("data-src");
-    let description = li.selectFirst("dd").text();
+  for (let i = 0; i < books.size(); i++) {
+    let e = books.get(i);
+    let name = e.selectFirst("dd > a")?.text();
+    let link = e.selectFirst("dd > a")?.attr("href");
+    let cover = e.selectFirst("dt img")?.attr("src");
+    let description = e.selectFirst("dd.name")?.text();
 
-    books.push({
-      name: name,
-      link: link,
-      cover: cover,
-      description: description
-    });
-  });
-
-  // Xác định phân trang
-  let next = null;
-  let hasNext = doc.selectFirst("a.next") !== null;
-  if (hasNext) {
-    next = page + 1;
+    if (name && link) {
+      data.push({
+        name: name,
+        link: link.startsWith("http") ? link : "https://www.drxsw.com" + link,
+        cover: cover?.startsWith("http") ? cover : "https://www.drxsw.com" + cover,
+        description: description?.trim()
+      });
+    }
   }
 
-  return Response.success(books, next);
+  return Response.success(data);
 }
