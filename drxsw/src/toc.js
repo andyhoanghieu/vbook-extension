@@ -1,19 +1,14 @@
 function execute(url) {
-  var response = fetch(url);
-  if (!response.ok) return Response.error("Không lấy được dữ liệu");
+    let doc = Http.get(url).html();
 
-  var doc = response.html();
-  var list = doc.select("ul.chapter li a");
-  var data = [];
-
-  for (var i = 0; i < list.size(); i++) {
-    var el = list.get(i);
-    data.push({
-      name: el.text(),
-      url: el.attr("href"),
-      host: "https://www.drxsw.com"
+    let list = [];
+    doc.select("ul#chapterList li a").forEach(it => {
+        list.push({
+            name: it.text(),
+            url: it.attr("href"),
+            host: "https://www.drxsw.com"
+        });
     });
-  }
 
-  return Response.success(data);
+    return Response.success(list);
 }
