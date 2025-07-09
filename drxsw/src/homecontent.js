@@ -1,22 +1,26 @@
 // homecontent.js
 function execute(url, page) {
-  let doc = Http.get(url).html();
-  let books = doc.select("div[class=channel] dl");
-  let data = [];
+  var doc = Http.get(url).html();
+  var books = doc.select("div.channel dl");
+  var data = [];
 
-  for (let i = 0; i < books.size(); i++) {
-    let e = books.get(i);
-    let name = e.selectFirst("dd > a")?.text();
-    let link = e.selectFirst("dd > a")?.attr("href");
-    let cover = e.selectFirst("dt img")?.attr("src");
-    let description = e.selectFirst("dd.name")?.text();
+  for (var i = 0; i < books.size(); i++) {
+    var e = books.get(i);
+    var aTag = e.select("dd > a").first();
+    var imgTag = e.select("dt img").first();
+    var descTag = e.select("dd.name").first();
 
-    if (name && link) {
+    if (aTag != null) {
+      var name = aTag.text();
+      var link = aTag.attr("href");
+      var cover = imgTag != null ? imgTag.attr("src") : null;
+      var description = descTag != null ? descTag.text() : "";
+
       data.push({
         name: name,
-        link: link.startsWith("http") ? link : "https://www.drxsw.com" + link,
-        cover: cover?.startsWith("http") ? cover : "https://www.drxsw.com" + cover,
-        description: description?.trim()
+        link: link.indexOf("http") === 0 ? link : "https://www.drxsw.com" + link,
+        cover: cover != null && cover.indexOf("http") === 0 ? cover : "https://www.drxsw.com" + cover,
+        description: description
       });
     }
   }
