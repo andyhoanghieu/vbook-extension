@@ -1,24 +1,29 @@
 // detail.js
 function execute(url) {
-  let response = fetch(url);
-  if (!response.ok) return null;
+    var doc = Http.get(url).html();
 
-  let doc = response.html();
-  let name = doc.select(".booktitle").text();
-  let cover = doc.select(".bookimg img").attr("src");
-  let author = doc.select(".bookinfo p").first().text().replace("作者：", "").trim();
-  let description = doc.select(".bookintro").text();
-  let detail = doc.select(".bookinfo p").last().text();  // ngày cập nhật + trạng thái
+    var name = doc.select("div.bookright h1").text();
+    var author = doc.select("div.bookright span.p_author").text().replace("作者：", "").trim();
+    var cover = doc.select("#bookimg img").attr("src");
+    var description = doc.select("#bookintro").text();
+    var ongoingText = doc.select("#count li").first().text();
+    var ongoing = ongoingText.indexOf("连载") !== -1; // true nếu đang ra, false nếu hoàn thành
 
-  let ongoing = detail.indexOf("连载") >= 0 || detail.indexOf("更新") >= 0;
+    // Thêm domain nếu cover là dạng tương đối
+    if (cover && !cover.startsWith("http")) {
+        cover = "https://www.drxsw.com" + cover;
+    }
 
-  return Response.success({
-    name: name,
-    cover: cover.startsWith("http") ? cover : "https://www.drxsw.com" + cover,
-    host: "https://www.drxsw.com",
-    author: author,
-    description: description,
-    detail: detail,
-    ongoing: ongoing
-  });
+    return Response.success({
+        name: name,
+        cover: cover,
+        host: "www.drxsw.com",
+        author: author,
+        description: description,
+        detail: "",
+        ongoing: ongoing,
+        genres: [],
+        suggests: [],
+        comments: []
+    });
 }
