@@ -8,16 +8,16 @@ function execute(url, page) {
   let doc = response.html();
   const data = [];
 
-  doc.select(".section2 .bookbox").forEach(e => {
-    let name = e.select(".bookname").text();
-    let link = e.select("a").attr("href");
-    let cover = e.select(".bookimg img").attr("data-src");
-    let description = e.select(".intro_line").text();
+  doc.select("dl").forEach(e => {
+    let name = e.select("dd a").first().text();
+    let link = e.select("dd a").first().attr("href");
+    let cover = e.select("dt img").attr("src");
+    let description = e.select("dd.name").text();
 
     data.push({
       name: name,
       link: link,
-      cover: cover,
+      cover: cover.startsWith("http") ? cover : "https://www.drxsw.com" + cover,
       description: description
     });
   });
